@@ -1,4 +1,5 @@
-# Tutorial_01_Fiducial_Exosome Dataset Part I - Preparation
+# Tutorial_01_Fiducial_Exosome Dataset
+🔴 Tilt Series Inspection and Curation
 
 ## The dataset
 - **Five tilt series of extracellular vesicles with fiducials**
