@@ -31,7 +31,7 @@ This step typically includes:
 👉 **Best choice for:**
 Quality control and preparing clean input for automated workflows.
 
-➡️ **Continue here:** [Automated IMOD tutorial](./TiltseriesPreparation.md)
+➡️ **Continue here:** [TiltseriesPreparation](./TiltseriesPreparation.md)
 
 ---
 # Tilt Series Alignment and Reconstruction Workflows
