@@ -28,7 +28,7 @@ If you do not yet have a Scipion project, create one:
 > * follow the tutorial step by step
 
 <figure>
-  <img src="Figures_auto-imod/0-Workflow.png" width="100%">
+  <img src="Figures/0-Workflow.png" width="100%">
   <figcaption><b>Figure 1.</b> Overview of the complete tilt-series processing workflow.</figcaption>
 </figure>
 
@@ -59,12 +59,12 @@ Fill in the keyparameters and execute the job.
 - **Gain image:** Path to one gain reference image, e.g. `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosome/data/filename.gain`
 
 <figure>
-  <img src="Figures_auto-imod/1-ImportTilt-seriesMovies.png" width="70%">
+  <img src="Figures/1-ImportTilt-seriesMovies.png" width="70%">
   <figcaption><b>Figure 2.</b> Keyparameters `Import tilt series movies`.</figcaption>
 </figure>
 
 <br><figure> 
-  <img src="Figures_auto-imod/1-Import_complete_TSpixel.png" width="70%">
+  <img src="Figures/1-Import_complete_TSpixel.png" width="70%">
   <figcaption> <b>Figure 3.</b> When the job has finished, open the Summary panel and verify that the import was successful in the Tomo Viewer. The Tomo Viewer displays the data and confirms the successful import of five tilt series in the correct order into the Scipion framework. </figcaption> 
 </figure>
 
@@ -95,10 +95,10 @@ The most important parameters are:
 - **Use the movie average**: No
 
 <figure> 
-      <img src="Figures_auto-imod/3_WARP_MotionCorr1.png" width="70%">
+      <img src="Figures/3_WARP_MotionCorr1.png" width="70%">
       <b>Figure 4a.</b> Motion correction parameters (input).<br>
       <br>
-      <img src="Figures_auto-imod/3b_WARP_MotionCorr2.png" width="70%">
+      <img src="Figures/3b_WARP_MotionCorr2.png" width="70%">
       <b>Figure 4b.</b> Motion correction parameters (CTF).
 <figure>
 
@@ -111,7 +111,7 @@ The most important parameters are:
 During electron microscopy data acquisition, interactions of the electron beam with the sample and surrounding microscope components can generate X-rays. When these X-rays hit the detector, they produce isolated, extremely bright photons that can damage pixels or small clusters of pixels. Those defects are often referred to as hot pixels. These hot pixels are unrelated to the biological signal and can interfere with downstream processing steps, in particular alignment and reconstruction, where they may bias correlation-based methods. The IMOD protocol `imod - Xray eraser` is designed to detect and remove these hot pixels. The input to this protocol is a tilt series, typically the output of the movie alignment step. In most cases, the protocol can be executed using the default parameters. The ouput of this protocol will be a set of tilt series that looks almost identical to the input tilt series. Check the Summary → Output → TiltSeries. There are five tiltseries, image size is 5760 × 4092 pixels with a pixel size of 1.38 Å/px, the full stack contains **41 tilts**. The output shows this as `5 x 41 x 5760 x 4092, 1.38 Å/px`.
 
 <figure> 
-  <img src="Figures_auto-imod/5_imod_xrayeraser.png" width="70%">
+  <img src="Figures/5_imod_xrayeraser.png" width="70%">
   <b>Figure 5.</b> X-ray eraser input parameters.
 <figure> 
 
@@ -132,7 +132,7 @@ Procedure
 > Click **Save** and when prompted, choose **Re-stack the tilt series**.
 
 <figure> 
-  <img src="Figures_auto-imod/subset_selection.gif" width="70%">
+  <img src="Figures/subset_selection.gif" width="70%">
   <b>Figure 6.</b> Subset Selection in `TomoViewer`.<br>
   <br>
 <figure> 
@@ -142,14 +142,13 @@ Close `Tomo Viewer`, select the `X-ray eraser` run in the Scipion project. The o
 
 
 <figure> 
-  <img src="Figures_auto-imod/imod_xrayeraser_tv_output.png" width="90%"> 
+  <img src="Figures/5-imod_xrayeraser_tv_output.png" width="90%"> 
   <b>Figure 7.</b> Output of X-ray eraser job after re-stack in `TomoViewer`.<br>
 <figure> 
 
 ### Excluding CTFs in the `CTFtomoViewer`
 
 For this dataset, there is no need to exclude CTFs. However, you may choose to do so for practice or exploration. The procedure is similar to the `TomoViewer`. Here, you exclude poor-quality CTFs, which typically appear as outliers.
-
 
 <br>
 <br>
