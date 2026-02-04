@@ -20,12 +20,14 @@ This small dataset is intentionally designed to:
 
 If you do not yet have a Scipion project, create one:
 
-> * create the project in your local directory:`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/`  
+> * move to directory: cd `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/`
+> * mkdir -p school001
+> * cd school001
 
 ## The workflow
 
 > * import the workflow from: `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/workflow/Dataset_01_Fiducials_Exosomes.json`
-> * the dataset is here:`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosome/data`  
+> * the dataset is here:`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosomes/data`  
 > * follow the tutorial step by step
 
 <figure>
