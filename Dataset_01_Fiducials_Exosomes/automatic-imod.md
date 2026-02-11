@@ -2,7 +2,7 @@
 **Part II - Quick assessment: Automated Tilt Series Alignment and Tomogram reconstruction using IMOD**
 
 **CryoEM Team** 🔵 **Scipion Team** 
-Last update: 04 February 2026, 19:32
+Last update: 11 February 2026, 22:00
 
 **keywords:** ["cryo-ET", "Scipion", "IMOD", "Etomo", "AreTomo", "reconstruction"]
 
