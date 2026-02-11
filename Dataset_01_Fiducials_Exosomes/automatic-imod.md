@@ -185,6 +185,8 @@ We use the Beadfixer job to check the completeness of the fiducial model. Go to 
 **Note:** The updated `SetOfLandmarkModels` replaces the previous model when saved (press **S** in 3dmod). Changes such as deleting or modifying contours are permanent and will be reflected in Scipion when the model is reopened. You can verify that your edits were saved by checking the number of contours before and after modification. This step serves as a **manual refinement** of the automatically generated fiducial model.  
 The pipeline can run fully automated without user intervention, but alignment quality often improves if fiducial models are inspected and corrected manually. A common workflow is to first run the pipeline automatically, then return to this step to refine the fiducial model and rerun the downstream alignment steps.
 
+> **Legacy:** For a step-by-step manual guide, see the separate protocol by **Emily Machala** [legacy/ETOMO.pdf](legacy/ETOMO.pdf)
+
 ## 🔵 imod – Fiducial alignment
 
 Once the landmark (fiducial) models are generated and cleaned, the final alignment of the tilt series can be calculated using the `imod - fiducial alignment` protocol.
@@ -218,23 +220,39 @@ This protocol produces:
 - a `SetOfCoordinates3D` describing fiducial positions in 3D space
 - Use again the beadfixer to help you finding gaps.
 
-**Tip**: The output tilt series as result of the alignment carries an (`+ali`) flag. Open it in the `TomoViewer`to see the associated transforation matrix per tilt. The shown rot, shiftX and shiftY are the rotation and shift extracted from the tilt image following the imod convention.
-<img src="Figures/11-FineAlign_TS_matrix.png" height="100"><br>
+<table width="100%">
+  <tr>
+    <th align="left" colspan="2">
+      <b>Tip:</b> The output tilt series as result of the alignment carries an (<code>+ali</code>) flag.
+      Open it in the <code>TomoViewer</code> to see the associated transformation matrix per tilt.
+      The shown <code>rot</code>, <code>shiftX</code> and <code>shiftY</code> are the rotation and shift extracted from the tilt image following the IMOD convention.
+      <br><br>
+      The tilt series can be opened with and without the transformation matrix applied (<i>interpolated</i>).
+    </th>
+  </tr>
 
-The tilt series can be open without and without the transformation matrix applied (`interpolated`).
-<table>
-<tr>
-<td align="center">
-<img src="Movies/11-FineAlign_TS.gif" height="360"><br>
-<sub>Tilt series after fine alignment</sub>
-</td>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/11-FineAlign_TS_matrix.png" height="100"><br>
+      <sub>Transformation matrix per tilt (from <code>TomoViewer</code>)</sub>
+    </td>
+  </tr>
 
-<td align="center">
-<img src="Movies/11-FineAlign_TS_interpolated2.gif" height="360"><br>
-<sub>Tilt series after fine alignment (interpolated)</sub>
-</td>
-</tr>
+  <tr>
+    <th align="center">Tilt series after fine alignment</th>
+    <th align="center">Tilt series after fine alignment (interpolated)</th>
+  </tr>
+
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/11-FineAlign_TS.gif" height="360"><br>
+    </td>
+    <td align="center" width="50%">
+      <img src="Movies/11-FineAlign_TS_interpolated2.gif" height="360"><br>
+    </td>
+  </tr>
 </table>
+
 
 ### Optional: Beadfixer to check for big residuals
 Part of the process includes reducing the mean residual error to a subpixel value (<1 pixel). The following iterative steps involve fixing fiducial points with large residuals.
@@ -264,25 +282,31 @@ Next, inspect the tomogram in Tomo Viewer or IMOD and evaluate:
 
 For this dataset, we keep the center and crop 50 voxels from both sides, resulting in a final thickness of 200 voxels.
 
-<table>
-<tr>
+<table width="75%">
+  <tr>
+    <th align="center" colspan="2">Reconstruction parameters (300 voxels thickness)</th>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/12-imod_TomogramReconstruction.png" width="60%"><br>
+      <sub>Reconstruction parameters (300 voxels thickness)</sub>
+    </td>
+  </tr>
 
-<td align="center">
-<img src="Figures/12-imod_TomogramReconstruction.png" height="320"><br>
-<sub>Reconstruction parameters (300 voxels thickness)</sub>
-</td>
-
-<td align="center">
-<img src="Movies/Tomogram_300.gif" height="320"><br>
-<sub>Initial reconstruction (300 voxels)</sub>
-</td>
-
-<td align="center">
-<img src="Movies/Tomogram_imod_200.gif" height="320"><br>
-<sub>Cropped reconstruction (200 voxels, centered)</sub>
-</td>
-
-</tr>
+  <tr>
+    <th align="center">Initial reconstruction (300 voxels)</th>
+    <th align="center">Cropped reconstruction (200 voxels, centered)</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/Tomogram_300.gif" width="75%"><br>
+      <sub>Initial reconstruction (300 voxels)</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="Movies/Tomogram_imod_200.gif" width="75%"><br>
+      <sub>Cropped reconstruction (200 voxels, centered)</sub>
+    </td>
+  </tr>
 </table>
 
 ## 🔵 CTF correction
@@ -294,20 +318,49 @@ This protocol takes as input:
 
 For this tutorial, keep all parameters at their default values.
 
-<img src="Figures/12-imod-CTFcorr.png" width="50%">
-<sub>Input parameters for CTF correction</sub>
+<table width="100%">
+  <tr>
+    <th align="center">CTF correction: input parameters</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="Figures/12-imod-CTFcorr.png" width="60%"><br>
+      <sub>Input parameters for CTF correction</sub>
+    </td>
+  </tr>
+</table>
 
 ## Final tomogram reconstruction with tomo3D
 
 **Reference**: [J.I. Agulleiro 2011](https://doi.org/10.1093/bioinformatics/btq692)[J.I. Agulleiro 2015](https://doi.org/10.1016/j.jsb.2014.11.009)
 **Plugin**: [scipion-em-tomo3d](https://github.com/scipion-em/scipion-em-tomo3d)
 
-To reconstruct the final tomogram from CTF corrected aligned tiltseries, we use `tomo3d - reconstruct tomogram`. Tomo3D provides two different reconstruction algorithm: Weighted Back Projection (WBP) and Simultaneous Iterative reconstruction technique (SIRT). Se below the visual differences. 
+To reconstruct the final tomogram from a **CTF-corrected, aligned tilt series**, we use `tomo3d - reconstruct tomogram`. Tomo3D provides two reconstruction algorithms:
 
-> **Tip**: WBP is faster than the SIRT method, but SIRT provides higher contrast. To visualize cellular enviroments SIRT is recommended, or to pick subtomogram with a template matching approach. If classical subtomogram averaging is going to be carried out, WBP is recommended.
+- Weighted Back Projection **(WBP)**
+- Simultaneous Iterative Reconstruction Technique **(SIRT)**
 
-The input of the reconstruction will be the binned CTF corrected tilt series. A SIRT recontruction is recommended in this case to produced tomograms with high contrast. The `Tomogram Thickness` was set to 300 voxels.
-The output can be visualized by clicking on Analyze results or alternatively by choosing the visualization tool by right-clicking on the output in the Summary box.
+### How WBP and SIRT differ (technical intuition)
+
+**WBP (Weighted Back Projection)** is a *single-pass* analytic reconstruction:
+- Each 2D projection is **backprojected** into 3D after applying a **frequency-space weighting/filter**.
+- **Fast**, and tends to preserve **high-frequency detail**, but may show **streaking artifacts** and lower apparent contrast in noisy cellular data.
+
+**SIRT (Simultaneous Iterative Reconstruction Technique)** is an *iterative* reconstruction:
+- Starts from an initial 3D estimate, then repeatedly **forward-projects** and compares to the measured projections.
+- The **residual** is **backprojected** to update the volume over multiple iterations.
+- Often yields **higher visual contrast** and reduced streaking, but can appear **smoother** (high frequencies may be damped depending on iterations/noise).
+
+> **Rule of thumb:** Use **SIRT** for interpretation/segmentation/template matching; use **WBP** for **STA** and when you want a minimally smoothed reconstruction.
+
+Below we show typical visual differences between **SIRT** and **WBP**.
+
+### Inputs and parameters
+The input for reconstruction is the **binned, CTF-corrected tilt series**. In this tutorial we use **SIRT** to obtain a higher-contrast tomogram.  
+`Tomogram Thickness` was set to **200 voxels**.
+
+### Output visualization
+The reconstructed volume can be inspected via **Analyze results**. Alternatively, right-click the output in the **Summary** panel and select a visualization tool.
 
 <table>
   <tr>
@@ -316,12 +369,12 @@ The output can be visualized by clicking on Analyze results or alternatively by 
   </tr>
   <tr>
     <td align="center">
-      <img src="Figures/13-tomo3Dsirt.png" width="70%">
+      <img src="Figures/13-tomo3Dsirt.png" width="94%">
       <br>
       <em>Input: Tomo3D reconstruction with SIRT (200 voxels)</em>
     </td>
     <td align="center">
-      <img src="Figures/13-tomo3DWBP.png" width="75%">
+      <img src="Figures/13-tomo3DWBP.png" width="100%">
       <br>
       <em>Input: Tomo3D reconstruction with WBP (200 voxels)</em>
     </td>
@@ -340,20 +393,118 @@ The output can be visualized by clicking on Analyze results or alternatively by 
   </tr>
 </table>
 
-# Next upcoming
-## Tomogram denoise with tomo3D
-<img src="Figures/14-denoise.png" width="70%">
+## Tomogram denoising with Tomo3D (for a segmentation friendly volume)
+
+For segmentation, a reconstructed tomogram is often still very noisy. Applying denoising can improve the visibility of membranes and cellular features and can make manual or ML-based segmentation more robust.
+
+<table>
+  <tr>
+    <th align="center" colspan="2">Input</th>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/14-denoise.png" width="60%">
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">SIRT</th>
+    <th align="center">Denoise</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/Tomogram_Tomo3D_200_SIRT.gif" width="86%">
+    </td>
+    <td align="center" width="50%">
+      <img src="Movies/14-Denoising.gif" width="90%">
+    </td>
+  </tr>
+</table>
+
+
+### Output: Sanity check the denoised volume
+Open raw vs denoised side-by-side (slice + ortho views).
+Check you didn’t lose: membranes “crispness” and thin filaments.
+Look for artifacts: ringing, over-smoothing, patchy textures, hallucinated continuity.
+
+> **Note:** Denoising alters image statistics. Use it for **visualization and segmentation**, but keep a **minimally processed reference tomogram** for quantitative workflows (e.g., STA).
+
+## Tomogram filtering in IMOD (optional)
+
+In addition to denoising, simple filters that can further improve interpretability for **visual inspection** and **segmentation** (e.g., emphasizing membranes or suppressing high-frequency noise). Filtering is optional and should be used conservatively.
+
+**Why/when to filter**
+- Improve interpretability for inspection/segmentation (reduce high-frequency noise).
+- Emphasize specific spatial scales (feature-size dependent).
+- Avoid heavy filtering for quantitative workflows (e.g., STA). Keep a minimally processed reference.
+
+> **Legacy:** For a step-by-step example in IMOD, see the separate protocol by **Clara Feldmann**, which documents the filter settings (**filter type + parameters**) used in our workflow: [legacy/filtering.pdf](legacy/filtering.pdf)
 
 ## Tomogram Segmentation
+We have different options for Segmentation, e.g. Dynamo, Tardis or Membrain. In Scipion we will use Tardis and Membrain as example tools.
+
+### Tardis Segmentation + Membrain Skeletonize
+Goal: You start with denoised tomograms and end with: (1) SetOfTomoMasks: one 3D segmentation mask per tomogram and (2) Set of Meshes: 3D surface models derived from the masks (great for visualization)
+
+> Rule of thumb:** quantify on **masks**, make figures with **meshes**.
+
+<table>
+  <tr>
+    <th align="center" colspan="2">
+      Input_Tardis: denoised tomograms; we segment only membranes
+    </th>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/15-Tardis_input.png" width="60%">
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">Output 1 – SetOfTomoMasks (Tardis) in <code>imod</code></th>
+    <th align="center">Output 2 – SetOfMeshes (MembrainSkeletonize) in <code>ChimeraX</code></th>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/15-Tardis_Membranes_TomoMask.gif" width="87%">
+    </td>
+    <td align="center" width="50%">
+     see below how to open it in ChimeraX
+      <img src="Figures/16-membrainskeletonize.png" width="80%">
+    </td>
+  </tr>
+</table>
+
+**Output 1 `SetOfTomoMasks` (1 per tomogram):**  
+A **3D label volume** aligned to each tomogram (same grid/size ideally).  
+- one mask corresponds to one tomogram
+- binary mask where each voxel has value 0/1: `0=background`, `1=target` (or multi-class integers)  
+- used for: overlay QC + measurements + downstream processing
+
+**Output 2 `Set of Meshes`:**  --> this cannot be visualized from Tardis. We run Membrain Skeletonize to get the Mesh.
+**Surface models** generated from the masks (triangulated geometry, e.g. `.ply/.obj/.stl`, tool-dependent).  
+- used for: 3D visualization/figures + surface metrics
 
 ## Visualization in ChimeraX
+### Let's open the segmentation
+<img src="Movies/17-VisualizeSegInChimeraX.gif" width="95%">
 
-## Fun Fact: Fidder - detects and erases fiducials
+# Upcoming Next
+## Overlay the segmentation with the tomogram
+## How Segmentation looks like when you do not use denoising
+
+# New Page
+## A few tricks to improve your results?
+Let's go through a few cosmetic steps now that you could add to your workflow.
+
+### Fidder - detects and erases fiducials
 
 **Reference**: [TeamTomo](https://github.com/teamtomo/fidder)
 **Plugin**: [scipion-em-fidder](https://github.com/scipion-em/scipion-em-fidder)
 
 Fiducials markers were used to tilt series, due to their high contrast. However, the strong signal of the gold beads can introduce artifacts in the reconstruction. Specially, the artifacts can complicate the tomogram interpretation and introduce errors in the use of image processing algorithms as: Picking and sutomogram averaging. These effects can be avoided by erasingthe fiducial markers in the images. To do that the protocol `fidder - detect and erase fiducials` can be used. Fidder uses a U-net (deep learning) trained at 8A/px to segment the fiducials. In a second step, the segmented fiducial markers are substituted with white noise matching the local mean and global standard deviation of the image. Fidder only presents a free parameter, the threshold, which aims to determine probability threshold for deteting the gold beads. An strict value of 0.9 should work with this data set. The figures
+
+** When to do it?**
 
 To execute the protocol the next paramaters are used:
 - *Input:*
@@ -363,7 +514,7 @@ To execute the protocol the next paramaters are used:
 <img src="Figures/Fidder.png" width="50%">
 <sub>Input parameters for Fidder</sub>
 
-Next steps include imod - CTF correction and tomo3d reconstruction.
-
-
+### Cropping the final reconstruction
+### Perfectionate Tomogram Positioning
+### Using AreTomo on Fiducial-less samples (the real ones!)
 
