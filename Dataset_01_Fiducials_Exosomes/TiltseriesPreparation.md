@@ -11,18 +11,28 @@ This small dataset is intentionally designed to:
 
 ## Set-up Scipion environment and workflow with your user account
 
-> * Log in to: https://max-cssb-display.desy.de:3389/  
-> * Open a terminal window  
+> * Log in to: https://max-cssb-display.desy.de:3389/ with your school account
+> * When logged-in, open a terminal window
+
+Set-up the local environment:
+> cd $HOME
+> rm -f .profile
+> echo "source /gpfs/cssb/software/envrc" >>.bash_profile
+
+Now let's go to our working folder:
+> * move to directory: cd `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/`
+> * in this folder mkdir -p school001
+> * cd school001
+
+Now let's copy the Scipion project and the associated movies here:
+rsync -av /gpfs/cssb/software/tmp/cryoemcourse_2026/ReconstructionTutorial .
+
+Now let's launch the project:
 > * type `module load scipion`
 > * type `scipion3`
 > * open scipion project `Reconstruction Workflow`
+
 > **Note:** a default project does currently not exist for user accounts
-
-If you do not yet have a Scipion project, create one:
-
-> * move to directory: cd `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/`
-> * mkdir -p school001
-> * cd school001
 
 ## The workflow
 
