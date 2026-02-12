@@ -2,7 +2,7 @@
 **Part II - Quick assessment: Automated Tilt Series Alignment and Tomogram reconstruction using IMOD**
 
 **CryoEM Team** 🔵 **Scipion Team** 
-Last update: 11 February 2026, 22:00
+Last update: 04 February 2026, 19:32
 
 **keywords:** ["cryo-ET", "Scipion", "IMOD", "Etomo", "AreTomo", "reconstruction"]
 
@@ -14,6 +14,14 @@ Last update: 11 February 2026, 22:00
 - **warp – tilt-series motion and ctf estimation** finished
 - **imod – x-ray eraser** finished, hot pixels removed
 - **tomoviewer – tilt series curation** finished & 2/5 tilt series selected
+
+Now we connect the pre-processing to tilt-series alignment and tomogram reconstruction. We will start with the blue track.
+<table>
+<tr>
+<td align="center">
+<img src="Figures/0-Workflow.png" width="100%"<br>
+<sub>Workflow covered in this tutorial</sub>
+</td>
 
 ## 🔵 The IMOD workflow
 
@@ -330,7 +338,7 @@ For this tutorial, keep all parameters at their default values.
   </tr>
 </table>
 
-## Final tomogram reconstruction with tomo3D
+## 🔴 Final tomogram reconstruction with tomo3D
 
 **Reference**: [J.I. Agulleiro 2011](https://doi.org/10.1093/bioinformatics/btq692)[J.I. Agulleiro 2015](https://doi.org/10.1016/j.jsb.2014.11.009)
 **Plugin**: [scipion-em-tomo3d](https://github.com/scipion-em/scipion-em-tomo3d)
@@ -393,7 +401,7 @@ The reconstructed volume can be inspected via **Analyze results**. Alternatively
   </tr>
 </table>
 
-## Tomogram denoising with Tomo3D (for a segmentation friendly volume)
+## 🔴 Tomogram denoising with Tomo3D (for a segmentation friendly volume)
 
 For segmentation, a reconstructed tomogram is often still very noisy. Applying denoising can improve the visibility of membranes and cellular features and can make manual or ML-based segmentation more robust.
 
@@ -429,7 +437,7 @@ Look for artifacts: ringing, over-smoothing, patchy textures, hallucinated conti
 
 > **Note:** Denoising alters image statistics. Use it for **visualization and segmentation**, but keep a **minimally processed reference tomogram** for quantitative workflows (e.g., STA).
 
-## Tomogram filtering in IMOD (optional)
+## 🔵 Tomogram filtering in IMOD (optional)
 
 In addition to denoising, simple filters that can further improve interpretability for **visual inspection** and **segmentation** (e.g., emphasizing membranes or suppressing high-frequency noise). Filtering is optional and should be used conservatively.
 
@@ -440,13 +448,21 @@ In addition to denoising, simple filters that can further improve interpretabili
 
 > **Legacy:** For a step-by-step example in IMOD, see the separate protocol by **Clara Feldmann**, which documents the filter settings (**filter type + parameters**) used in our workflow: [legacy/filtering.pdf](legacy/filtering.pdf)
 
-## Tomogram Segmentation
-We have different options for Segmentation, e.g. Dynamo, Tardis or Membrain. In Scipion we will use Tardis and Membrain as example tools.
+## 🔴 Tomogram Segmentation
+Segmentation turns a tomogram into a label volume (mask) that can be used for quality check, quantification, and downstream analysis. In this tutorial we show two example workflows in Scipion:
+* Tardis: membrane segmentation (fast, robust starting point)
+* Membrain: membrane segmentation with a different model/behavior (useful for comparison / sometimes cleaner membranes)
 
-### Tardis Segmentation + Membrain Skeletonize
-Goal: You start with denoised tomograms and end with: (1) SetOfTomoMasks: one 3D segmentation mask per tomogram and (2) Set of Meshes: 3D surface models derived from the masks (great for visualization)
+From either segmentation mask we can generate surface meshes using MembrainSkeletonize (great for figures and 3D visualization).
+> Rule of thumb: quantify on `masks`, make figures with `meshes`.
 
-> Rule of thumb:** quantify on **masks**, make figures with **meshes**.
+### Workflow A: Tardis Segmentation (+ Membrain Skeletonize)
+**Your input**
+Input: denoised tomograms
+Target here: membranes only (binary segmentation)
+
+**Create the Mask**
+Output: SetOfTomoMasks (one 3D mask per tomogram), usually binary: 0 = background, 1 = membrane
 
 <table>
   <tr>
@@ -475,29 +491,73 @@ Goal: You start with denoised tomograms and end with: (1) SetOfTomoMasks: one 3D
   </tr>
 </table>
 
-**Output 1 `SetOfTomoMasks` (1 per tomogram):**  
-A **3D label volume** aligned to each tomogram (same grid/size ideally).  
-- one mask corresponds to one tomogram
-- binary mask where each voxel has value 0/1: `0=background`, `1=target` (or multi-class integers)  
-- used for: overlay QC + measurements + downstream processing
+**Convert the Mask into a SetOfMeshes**
+Meshes are surface models derived from masks; meshes are used for: 3D visualization + figure rendering + qualitative inspection
+To create the mesh, we run MembrainSkeletonize.
 
-**Output 2 `Set of Meshes`:**  --> this cannot be visualized from Tardis. We run Membrain Skeletonize to get the Mesh.
-**Surface models** generated from the masks (triangulated geometry, e.g. `.ply/.obj/.stl`, tool-dependent).  
-- used for: 3D visualization/figures + surface metrics
-
-## Visualization in ChimeraX
-### Let's open the segmentation
+### Visualization of the Mesh in ChimeraX
+1. Open the segmentation as shown in the video.
 <img src="Movies/17-VisualizeSegInChimeraX.gif" width="95%">
 
-# Upcoming Next
-## Overlay the segmentation with the tomogram
-## How Segmentation looks like when you do not use denoising
+2. Overlay the segmentation with the tomogram in ChimeraX
+(note: overlay does currently not work properly)
 
-# New Page
-## A few tricks to improve your results?
-Let's go through a few cosmetic steps now that you could add to your workflow.
+3. Assess the quality of your mesh
+- Does the mesh hug the membrane location (not offset)?
+- Do you see holes / spikes / “shrink-wrapping” artifacts?
+- Mesh density: too dense = heavy files; too sparse = blocky surfaces
+- Do you have to much noise?
 
-### Fidder - detects and erases fiducials
+### Workflow B: Membrain + Membrain Skeletonize
+It’s good practice to try a second method for comparison / sanity check. Since we are segmenting membranes, we will use Membrain as an alternative model to Tardis.
+
+> In some datasets Membrain yields smoother / more continuous membrane masks than Tardis. Always verify by overlay QC.
+
+**Create the mask**
+Input: Input: denoised tomograms
+Output: SetOfTomoMasks (same concept as above, membrain also produces a mask per tomogram)
+
+Here the output is binary, we can proceed directly to skeletonize/mesh generation
+convert mask → mesh for ChimeraX/figures.
+
+### Quick comparison: Tardis vs Membrain
+Tardis: often fast + solid baseline segmentation for membranes; good first pass.
+Membrain: sometimes produces smoother / more continuous membrane masks; good alternative when Tardis struggles.
+Best practice: run both on 1–2 tomograms, compare overlays, then decide what you’ll use for the whole dataset.
+
+<table width="100%">
+  <tr>
+    <td align="center" width="50%">
+      <img src="Figures/18-Membrain_Denoised.png" width="95%"><br>
+      <sub>Membrain (denoised)</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="Figures/18-Tardis_Denoise.png" width="95%"><br>
+      <sub>Tardis (denoised)</sub>
+    </td>
+  </tr>
+</table>
+
+
+
+# A few thoughts:
+## 🪼 Why denoising is important (even if this example looks similar)
+<img src="Figures/14_Denoise_orNotDenoise_Workflow.png" width="95%">
+Below we compare Membrain segmentation on (A) a raw tomogram vs. (B) the denoised version.
+In this high-contrast example, you may think: Ha! There is barely a difference!
+That can happen when membranes are already very clear and SNR is decent.
+So why denoise at all? Because in many cellular tomograms denoising can make a big difference by:
+Stabilizing segmentation in low-SNR regions (thin membranes, crowded cytoplasm)
+Reducing false positives from noise, ice contamination, fringes, or reconstruction artifacts
+Improving continuity of membrane masks (fewer breaks → nicer meshes)
+Reducing parameter sensitivity (thresholds/model confidence become less “twitchy”)
+Rule of thumb:
+If you need to fight the segmentation parameters a lot, denoising usually helps (or you need a different model).
+We’ll revisit this with true cellular samples in the next tutorial, where the effect is typically much more obvious.
+
+
+## Can I get rid of the Fiducials
+### 🪼 Fidder - detects and erases fiducials
 
 **Reference**: [TeamTomo](https://github.com/teamtomo/fidder)
 **Plugin**: [scipion-em-fidder](https://github.com/scipion-em/scipion-em-fidder)
@@ -505,16 +565,93 @@ Let's go through a few cosmetic steps now that you could add to your workflow.
 Fiducials markers were used to tilt series, due to their high contrast. However, the strong signal of the gold beads can introduce artifacts in the reconstruction. Specially, the artifacts can complicate the tomogram interpretation and introduce errors in the use of image processing algorithms as: Picking and sutomogram averaging. These effects can be avoided by erasingthe fiducial markers in the images. To do that the protocol `fidder - detect and erase fiducials` can be used. Fidder uses a U-net (deep learning) trained at 8A/px to segment the fiducials. In a second step, the segmented fiducial markers are substituted with white noise matching the local mean and global standard deviation of the image. Fidder only presents a free parameter, the threshold, which aims to determine probability threshold for deteting the gold beads. An strict value of 0.9 should work with this data set. The figures
 
 ** When to do it?**
+It is possible to get rid of fiducials early and late in the workflow. In our pipeline, we do it after `imod - fiducial alignment` has finished, just before the first reconstruction.
+<img src="Figures/Fidder_1_Workflow1.png" width="50%">
+<sub>Removing Fiducials prior to reconstruction</sub>
 
 To execute the protocol the next paramaters are used:
 - *Input:*
   - **Tilt series**: `imod - Fiducial alignment`
   - **Threshold**: 0.9
+<table>
+  <tr>
+    <th align="center" colspan="2">
+      Input (Fidder): aligned tilt series + threshold
+    </th>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/Fidder.png" width="60%"><br>
+      <sub>Input parameters for Fidder</sub>
+    </td>
+  </tr>
 
-<img src="Figures/Fidder.png" width="50%">
-<sub>Input parameters for Fidder</sub>
+  <tr>
+    <th align="center">Output 1 – Tilt series after fiducials are erased</th>
+    <th align="center">Output 2 – Tomogram reconstructed from the erased tilt series</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/Fidder_onAlignedTS.gif" width="95%"><br>
+      <sub>Aligned tilt series (fiducials removed)</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="Movies/Fidder_Tomo3D.gif" width="95%"><br>
+      <sub>Tomogram after reconstruction</sub>
+    </td>
+  </tr>
+</table>
 
-### Cropping the final reconstruction
-### Perfectionate Tomogram Positioning
-### Using AreTomo on Fiducial-less samples (the real ones!)
+
+Of course now, the segmentation will also skip fiducials and the final mesh will look better! Try yourself.
+
+### Cropping the final reconstruction & Perfectionate Tomogram Positioning
+<img src="Figures/tomogram_positioning_panels.png" width="95%">
+<sub>A simple figure illustrating tomogram positioning relative to the tilt axis and beam direction.</sub>
+
+## 🟢 Aretomo - tilt series align and reconstruct in one step
+**Reference**: [S. Zheng 2022](https://doi.org/10.1016/j.yjsbx.2022.100068)
+**Plugin**: [scipion-em-aretomo](https://github.com/scipion-em/scipion-em-aretomo)
+
+Use the Scipion protocol `aretomo - tilt series align and reconstruct` to perform alignment and reconstruction in a single run, right after tilt-series curation. 
+
+### Parameters used
+
+
+AreTomo supports two reconstruction methods:
+- WBP (Weighted Back Projection)
+- SART (Simultaneous Algebraic Reconstruction Technique)
+
+> Tip: WBP is faster, but SART typically gives higher contrast. For cellular environments and template-matching / subtomogram picking, SART is recommended.
+
+The outputs are:
+- aligned tilt series
+- reconstructed tomogram
+- optional: CTF estimation (if enabled)
+
+<table width="100%">
+  <tr>
+    <td align="center" colspan="2">
+      <img src="Figures/20-aretomoForm.png" width="100%"><br>
+      <sub>Input parameters</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="Movies/20-aretomoWithFiducials.gif" width="100%"><br>
+      <sub>Reconstruction with fiducials</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="Movies/20-AretomoNoFiducials.gif" width="100%"><br>
+      <sub>Reconstruction without fiducials (10-slice average)</sub>
+    </td>
+  </tr>
+</table>
+
+> **Tip:** You are done here for an overview/quality-check tomogram; if you want to move on to template matching or subtomogram averaging (STA), estimate the CTF and continue with a CTF-aware workflow (CTF correction + final reconstruction / CTF modeling in STA).
+
+More background on AreTomo: aretomo.md (upcoming)
+
+
+
 
