@@ -195,9 +195,8 @@ Procedure
 This creates a new tilt-series stack containing only the selected tilt series, which will be used for the next steps of the workflow.
 Close `Tomo Viewer`, select the `X-ray eraser` run in the Scipion project. The output now contains two tilt series sets: the full tilt-series set as 5 x 41 x 5760 x 4092, 1.38 Å/px, and the new created subset 2 x 41 x 5760 x 4092, 1.38 Å/px.<br>
 
-
 <figure> 
-  <img src="Figures/imod_xrayeraser_tv_output.png" width="90%"> 
+  <img src="Figures/5-imod_xrayeraser_tv_output.png" width="90%"> 
   <b>Figure 7.</b> Output of X-ray eraser job after re-stack in `TomoViewer`.<br>
 <figure> 
 
