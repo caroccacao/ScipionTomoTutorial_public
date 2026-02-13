@@ -215,7 +215,7 @@ There are many methods to align tilt series. Click on the following Software Nam
 
 | Method  | Description |Link to Tutorial|
 |--------|-------------|-------------|
-| 🔵 **IMOD**    | Fiducial-based alignment, automated | [IMOD](automatic-imod.md)
+| 🔵 **IMOD-heavy**    | Fiducial-based alignment, automated, good to learn | [IMOD](automatic-imod.md)
 | 🟢 **AreTomo** | Feature-based, automated | [AreTomo](aretomo.md)
 | 🟣 **ETOMO**   | Manual, step-by-step | [ETOMO](legacy/ETOMO.md)
 
