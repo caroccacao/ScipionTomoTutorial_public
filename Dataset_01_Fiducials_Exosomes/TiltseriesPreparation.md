@@ -1,5 +1,4 @@
-# Tutorial_01_Fiducial_Exosome Dataset
-🔴 Tilt Series Inspection and Curation
+# Tutorial_01_Fiducial_Exosome Dataset Part I - Preparation
 
 ## The dataset
 - **Five tilt series of extracellular vesicles with fiducials**
@@ -11,37 +10,80 @@ This small dataset is intentionally designed to:
 
 ## Set-up Scipion environment and workflow with your user account
 
-> * Log in to: https://max-cssb-display.desy.de:3389/ with your school account
-> * When logged-in, open a terminal window
+### Login to FastX
+> * Log in to **display003** node via https://max-cssb-display003.desy.de:3389/ or on the local app
+> * Make sure you use **display003**
 
-Set-up the local environment:
-> cd $HOME
-> rm -f .profile
-> echo "source /gpfs/cssb/software/envrc" >>.bash_profile
+### Open a terminal window and copy the scipion project in your local folder
+In the terminal type:
+> * `cd /gpfs/cssb/software/tmp/cryoemcourse_2026/`
+> * `ls` to see the content
+> * `mkdir school#ID`, e.g. school00
+> * `cd school00`
+> * confirm location, type `pwd` and this should give `> /gpfs/cssb/software/tmp/cryoemcourse_2026/school00`
+> * `cp -rv /gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/ReconstructionTutorial .`
+> * this takes about 5 mins. When finished, confirm that ReconstructionTutorial is in your school00 folder, by typing `ls`
 
-Now let's go to our working folder:
-> * move to directory: cd `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/`
-> * in this folder mkdir -p school001
-> * cd school001
+### Set-up the Scipion environment
+In the terminal type:
+> * `module avail` > you will not see scipion
+> * `source /gpfs/cssb/software/envrc`
+> * `module load scipion`
+> * `scipion3`
 
-Now let's copy the Scipion project and the associated movies here:
-rsync -av /gpfs/cssb/software/tmp/cryoemcourse_2026/ReconstructionTutorial .
+<figure>
+  <figcaption><sub><b>Setting up the project environment in the terminal.</b></sub></figcaption>
+  <img src="Figures/0-sourceenvironment.png" width="50%" alt="Setting up the project environment in the terminal">
+</figure>
 
-Now let's launch the project:
-> * type `module load scipion`
-> * type `scipion3`
-> * open scipion project `Reconstruction Workflow`
+### Connect the Scipion Project to the Scipion Infrastructure
+When the Scipion Project Window opens, click on
 
-> **Note:** a default project does currently not exist for user accounts
+> 1. `Import Project` (this will open another window)
+> 2. Uncheck `Copy`
+> 3. Click on the `folder` icon to browse your project location
+
+<figure>
+  <figcaption><sub><b>Step 1.</b> Import the project (Copy unchecked) and open the folder browser.</sub></figcaption>
+  <img src="Figures/1-importbuttons.png" width="50%" alt="Import Project dialog buttons">
+</figure>
+
+`Browse` and `Select` the project path:
+`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/ReconstructionTutorial`
+
+<figure>
+  <figcaption><sub><b>Step 2.</b> Browse to the ReconstructionTutorial folder and click Select.</sub></figcaption>
+  <img src="Figures/2-SelectProjectPath.png" width="50%" alt="Selecting the project path">
+</figure>
+
+After selecting the project path:
+
+> 1. Check the path
+> 2. Double-check `Copy` is unchecked
+> 3. Type your project name  
+> If the panel looks like this, press `Import`.
+
+<figure>
+  <figcaption><sub><b>Step 3.</b> Set-up window correctly filled (ready to import).</sub></figcaption>
+  <img src="Figures/3-TypeProjectName.png" width="50%" alt="Import project window filled">
+</figure>
+
+Now the Scipion Project window contains the project. The ReconstructionTutorial should open automatically. If not, double-click the project name. **Note:** After closing Scipion, you can select and reopen the project at any time.
+
+<figure>
+  <figcaption><sub><b>Step 4.</b> Project embedded (left) and opened (right).</sub></figcaption>
+  <img src="Figures/4-ReconstructionTutorialEmbedded.png" width="49%" alt="Scipion project embedded">
+  <img src="Figures/5-ProjectOpen.png" width="49%" alt="Scipion project opened">
+</figure>
 
 ## The workflow
 
 > * import the workflow from: `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/workflow/Dataset_01_Fiducials_Exosomes.json`
-> * the dataset is here:`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosomes/data`  
+> * the dataset is here:`/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosome/data`  
 > * follow the tutorial step by step
 
 <figure>
-  <img src="Figures/0-Workflow.png" width="100%">
+  <img src="Figures_auto-imod/0-Workflow.png" width="100%">
   <figcaption><b>Figure 1.</b> Overview of the complete tilt-series processing workflow.</figcaption>
 </figure>
 
@@ -72,12 +114,12 @@ Fill in the keyparameters and execute the job.
 - **Gain image:** Path to one gain reference image, e.g. `/gpfs/cssb/software/tmp/cryoemcourse_2026/scipion/tutorial_01_fiducial_exosome/data/filename.gain`
 
 <figure>
-  <img src="Figures/1-ImportTilt-seriesMovies.png" width="70%">
+  <img src="Figures_auto-imod/1-ImportTilt-seriesMovies.png" width="70%">
   <figcaption><b>Figure 2.</b> Keyparameters `Import tilt series movies`.</figcaption>
 </figure>
 
 <br><figure> 
-  <img src="Figures/1-Import_complete_TSpixel.png" width="70%">
+  <img src="Figures_auto-imod/1-Import_complete_TSpixel.png" width="70%">
   <figcaption> <b>Figure 3.</b> When the job has finished, open the Summary panel and verify that the import was successful in the Tomo Viewer. The Tomo Viewer displays the data and confirms the successful import of five tilt series in the correct order into the Scipion framework. </figcaption> 
 </figure>
 
@@ -108,10 +150,10 @@ The most important parameters are:
 - **Use the movie average**: No
 
 <figure> 
-      <img src="Figures/3_WARP_MotionCorr1.png" width="70%">
+      <img src="Figures_auto-imod/3_WARP_MotionCorr1.png" width="70%">
       <b>Figure 4a.</b> Motion correction parameters (input).<br>
       <br>
-      <img src="Figures/3b_WARP_MotionCorr2.png" width="70%">
+      <img src="Figures_auto-imod/3b_WARP_MotionCorr2.png" width="70%">
       <b>Figure 4b.</b> Motion correction parameters (CTF).
 <figure>
 
@@ -124,7 +166,7 @@ The most important parameters are:
 During electron microscopy data acquisition, interactions of the electron beam with the sample and surrounding microscope components can generate X-rays. When these X-rays hit the detector, they produce isolated, extremely bright photons that can damage pixels or small clusters of pixels. Those defects are often referred to as hot pixels. These hot pixels are unrelated to the biological signal and can interfere with downstream processing steps, in particular alignment and reconstruction, where they may bias correlation-based methods. The IMOD protocol `imod - Xray eraser` is designed to detect and remove these hot pixels. The input to this protocol is a tilt series, typically the output of the movie alignment step. In most cases, the protocol can be executed using the default parameters. The ouput of this protocol will be a set of tilt series that looks almost identical to the input tilt series. Check the Summary → Output → TiltSeries. There are five tiltseries, image size is 5760 × 4092 pixels with a pixel size of 1.38 Å/px, the full stack contains **41 tilts**. The output shows this as `5 x 41 x 5760 x 4092, 1.38 Å/px`.
 
 <figure> 
-  <img src="Figures/5_imod_xrayeraser.png" width="70%">
+  <img src="Figures_auto-imod/5_imod_xrayeraser.png" width="70%">
   <b>Figure 5.</b> X-ray eraser input parameters.
 <figure> 
 
@@ -145,7 +187,7 @@ Procedure
 > Click **Save** and when prompted, choose **Re-stack the tilt series**.
 
 <figure> 
-  <img src="Figures/subset_selection.gif" width="70%">
+  <img src="Figures_auto-imod/subset_selection.gif" width="70%">
   <b>Figure 6.</b> Subset Selection in `TomoViewer`.<br>
   <br>
 <figure> 
@@ -155,13 +197,14 @@ Close `Tomo Viewer`, select the `X-ray eraser` run in the Scipion project. The o
 
 
 <figure> 
-  <img src="Figures/5-imod_xrayeraser_tv_output.png" width="90%"> 
+  <img src="Figures_auto-imod/imod_xrayeraser_tv_output.png" width="90%"> 
   <b>Figure 7.</b> Output of X-ray eraser job after re-stack in `TomoViewer`.<br>
 <figure> 
 
 ### Excluding CTFs in the `CTFtomoViewer`
 
 For this dataset, there is no need to exclude CTFs. However, you may choose to do so for practice or exploration. The procedure is similar to the `TomoViewer`. Here, you exclude poor-quality CTFs, which typically appear as outliers.
+
 
 <br>
 <br>
